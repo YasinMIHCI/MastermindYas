@@ -4,86 +4,240 @@ Generer une combi  ->  demander une combi  ->  tester Combi  ->  Fin si combi co
 							     ->  Sinon traitement de la combi  ->   retours a la demande de la combi 
 
 
-Generer une combi = crée un emplacement pour la combi  ->  faire n fois  -> prendre aléatoirement un élément des couleurs disponible -> copier cette couleur dans l'emplacement n de la combi  -> renvoyer la combi remplie 
 
-
-
-Demander une combi = Afficher "Quelle combi ?"  -> Saisie combi  -> Verification combi possible  -> si combi possible, renvoyer la combi
-												 -> sinon revenir a la saisie
-
-
-Verification combi possible = regarder pour chaque couleur dans le guess si la couleur existe dans les couleurs dispo 
-
-
-tester combi_final  =  création d'une copie de la combi generer (d1) et de la combi demandée (d2)  ->  pour chaque élément de la combi jusqu'à n -> verifier si combi generer a l'emplacement n = combi demandé à l'emplacement n  ->  nb_validé+1  ->  retiré l'élément n des combi copié  ->  fin pour  ->  pour chaque élément de la combi copié et traiter jusqu'à n  ->  si l'élément n de la combi demandé = l'élément n de la combi secrete et l'élément n de la combi secrete copié n'a pas été traiter  ->
-
-
-FONCTION Test_combi(Guess, Solution) -> Combi*
-  Parametre Guess : Color[MAX_COLOR]
-  Parametre Solution : Color[MAX_COLOR]
+FONCTION Initialiser_combinaison_vide(combinaison)
+  Entrée : combinaison (structure de données)
   
-  resultat : Combi*
-  juste <- 0
-  moyen_correct <- 0
-  solution_utilisee : Booleen[MAX_COLOR] <- [FAUX, FAUX, FAUX, FAUX]
-  guess_utilisee : Booleen[MAX_COLOR] <- [FAUX, FAUX, FAUX, FAUX]
+  POUR chaque position dans la combinaison FAIRE
+    Mettre la couleur à AUCUNE
+    Mettre le résultat à NON_VERIFIE
+  FIN POUR
+FIN FONCTION
+
+
+
+
+FONCTION Initialiser_tableaux_suivi(tableau_secret, tableau_tentative)
+  Entrées : deux tableaux de suivi
   
-  POUR i DE 0 A MAX_COLOR-1 FAIRE
-    SI Guess[i] = Solution[i] ALORS
-      juste <- juste + 1
-      solution_utilisee[i] <- VRAI
-      guess_utilisee[i] <- VRAI
-      resultat->solution[i] <- CORRECT
+  POUR chaque position FAIRE
+    Marquer position du secret comme NON_TRAITE
+    Marquer position de la tentative comme NON_TRAITE
+  FIN POUR
+FIN FONCTION
+
+
+
+FONCTION Verifier_couleurs_correctes(tentative, secret, suivi_secret, suivi_tentative, compteur_corrects)
+  Entrées : tentative du joueur, secret à trouver, tableaux de suivi, compteur
+  
+  POUR chaque position de 0 à taille_combinaison - 1 FAIRE
+    SI couleur tentative à position égale couleur secret à position ALORS
+      Augmenter compteur_corrects de 1
+      Marquer position secret comme UTILISEE
+      Marquer position tentative comme UTILISEE
+      Noter résultat de tentative comme CORRECT
     SINON
-      resultat->solution[i] <- INDEFINITE
+      Noter résultat de tentative comme NON_VERIFIE
     FIN SI
   FIN POUR
+FIN FONCTION
+
+
+
+FONCTION Verifier_couleurs_partielles(tentative, secret, suivi_secret, suivi_tentative)
+  Entrées : tentative du joueur, secret, tableaux de suivi
   
-  POUR i DE 0 A MAX_COLOR-1 FAIRE
-    SI guess_utilisee[i] = FAUX ALORS
-      POUR j DE 0 A MAX_COLOR-1 FAIRE
-        SI solution_utilisee[j] = FAUX ET Guess[i] = Solution[j] ALORS
-          moyen_correct <- moyen_correct + 1
-          solution_utilisee[j] <- VRAI
-          resultat->solution[i] <- PARTIAL
-          SORTIR DE LA BOUCLE
+  POUR chaque position_tentative de 0 à taille_combinaison - 1 FAIRE
+    SI position_tentative est NON_UTILISEE ALORS
+      POUR chaque position_secret de 0 à taille_combinaison - 1 FAIRE
+        SI position_secret est NON_UTILISEE 
+           ET couleur tentative égale couleur secret ALORS
+          Marquer position_secret comme UTILISEE
+          Noter résultat comme PARTIEL
+          SORTIR de la boucle interne
         FIN SI
       FIN POUR
     FIN SI
   FIN POUR
+FIN FONCTION
+
+
+
+FONCTION Marquer_couleurs_fausses(tentative)
+  Entrée : tentative du joueur
   
-  POUR i DE 0 A MAX_COLOR-1 FAIRE
-    SI resultat->solution[i] = INDEFINITE ALORS
-      resultat->solution[i] <- FALSE
+  POUR chaque position FAIRE
+    SI résultat est encore NON_VERIFIE ALORS
+      Mettre résultat à FAUX
+    FIN SI
+  FIN POUR
+FIN FONCTION
+
+
+
+FONCTION Tester_combinaison(tentative, secret) -> nombre de corrects
+  Entrées : tentative du joueur, secret à trouver
+  Sortie : nombre de couleurs correctement placées
+  
+  Créer compteur_corrects initialisé à zéro
+  Créer tableau_suivi_secret
+  Créer tableau_suivi_tentative
+  
+  Initialiser_tableaux_suivi(tableau_suivi_secret, tableau_suivi_tentative)
+  Verifier_couleurs_correctes(tentative, secret, tableau_suivi_secret, tableau_suivi_tentative, compteur_corrects)
+  Verifier_couleurs_partielles(tentative, secret, tableau_suivi_secret, tableau_suivi_tentative)
+  Marquer_couleurs_fausses(tentative)
+  
+  RETOURNER compteur_corrects
+FIN FONCTION
+
+
+FONCTION Generer_code_secret(combinaison_secrete)
+  Entrée/Sortie : combinaison à remplir
+  
+  Obtenir liste_couleurs_disponibles
+  Calculer longueur_liste
+  
+  POUR chaque position dans la combinaison FAIRE
+    Générer indice_aleatoire entre zéro et longueur_liste - 1
+    Récupérer caractère couleur à indice_aleatoire dans liste
+    Convertir caractère en couleur
+    Placer couleur à position dans combinaison
+  FIN POUR
+FIN FONCTION
+
+
+FONCTION Convertir_caractere_vers_couleur(caractere) -> couleur
+  Entrée : caractère représentant une couleur
+  Sortie : énumération de couleur
+  
+  Créer variable couleur initialisée à AUCUNE
+  
+  SELON caractere FAIRE
+    CAS 'Y' : couleur prend valeur JAUNE
+    CAS 'B' : couleur prend valeur BLEU
+    CAS 'R' : couleur prend valeur ROUGE
+    CAS 'G' : couleur prend valeur VERT
+    CAS 'W' : couleur prend valeur BLANC
+    CAS 'P' : couleur prend valeur VIOLET
+  FIN SELON
+  
+  RETOURNER couleur
+FIN FONCTION
+
+
+
+FONCTION Convertir_couleur_vers_caractere(couleur) -> caractère
+  Entrée : énumération de couleur
+  Sortie : caractère représentant la couleur
+  
+  Créer variable caractere initialisée à espace
+  
+  SELON couleur FAIRE
+    CAS JAUNE : caractere prend 'Y'
+    CAS BLEU : caractere prend 'B'
+    CAS ROUGE : caractere prend 'R'
+    CAS VERT : caractere prend 'G'
+    CAS BLANC : caractere prend 'W'
+    CAS VIOLET : caractere prend 'P'
+    CAS AUCUNE : caractere prend espace
+  FIN SELON
+  
+  RETOURNER caractere
+FIN FONCTION
+
+
+
+FONCTION Convertir_saisie_en_combinaison(combinaison, texte_saisi) -> code_erreur
+  Entrées : combinaison à remplir, texte saisi par utilisateur
+  Sortie : code erreur (zéro si aucune erreur)
+  
+  Créer code_erreur initialisé à AUCUNE_ERREUR
+  
+  SI longueur du texte égale taille_combinaison ALORS
+    POUR chaque position dans le texte FAIRE
+      Convertir caractère à position en couleur
+      Placer couleur dans combinaison à position
+      
+      SI couleur est AUCUNE ALORS
+        Ajouter deux puissance position au code_erreur
+      FIN SI
+    FIN POUR
+  SINON
+    Afficher message erreur longueur invalide
+    Ajouter ERREUR_LONGUEUR au code_erreur
+  FIN SI
+  
+  RETOURNER code_erreur
+FIN FONCTION
+
+
+FONCTION Afficher_combinaison(combinaison)
+  Entrée : combinaison à afficher
+  
+  Créer compteur_partiels initialisé à zéro
+  Créer compteur_corrects initialisé à zéro
+  
+  POUR chaque position dans la combinaison FAIRE
+    SI résultat à position est PARTIEL ALORS
+      Augmenter compteur_partiels
+    SINON SI résultat à position est CORRECT ALORS
+      Augmenter compteur_corrects
     FIN SI
   FIN POUR
   
-  RETOURNER resultat
+  Afficher les quatre couleurs de la tentative
+  Afficher nombre de partiels
+  Afficher nombre de corrects
 FIN FONCTION
 
-FONCTION Generer_solution() -> Color[MAX_COLOR]
-  solution : Color[MAX_COLOR]
+
+
+FONCTION Initialiser_etat_jeu(etat)
+  Entrée/Sortie : état du jeu
   
-  POUR i DE 0 A MAX_COLOR-1 FAIRE
-    solution[i] <- RANDOM(0, 5)
+  Mettre numéro_tour à zéro
+  Initialiser_combinaison_vide(secret de etat)
+  Generer_code_secret(secret de etat)
+  
+  POUR chaque position dans historique FAIRE
+    Initialiser_combinaison_vide(combinaison à position)
   FIN POUR
-  
-  RETOURNER solution
 FIN FONCTION
 
-FONCTION Saisir_guess() -> Color[MAX_COLOR]
-  guess : Color[MAX_COLOR]
+
+FONCTION Afficher_etat_jeu(etat)
+  Entrée : état actuel du jeu
   
-  AFFICHER "Entrez votre combinaison (4 couleurs parmi Y, B, R, G, W, P) :"
+  Afficher numéro du tour actuel
   
-  POUR i DE 0 A MAX_COLOR-1 FAIRE
-    REPETER
-      LIRE caractere
-      couleur_valide <- Convertir_char_en_color(caractere)
-    JUSQU'A couleur_valide ≠ NULL
-    
-    guess[i] <- couleur_valide
+  POUR chaque tour joué FAIRE
+    Afficher_combinaison(combinaison du tour)
   FIN POUR
+FIN FONCTION
+
+
+FONCTION Jouer_tour(etat) -> nombre_corrects
+  Entrée/Sortie : état du jeu
+  Sortie : nombre de couleurs bien placées
   
-  RETOURNER guess
+  Sauvegarder indice_tour actuel
+  Augmenter numéro_tour de 1
+  Afficher numéro du tour
+  
+  Créer variable texte_saisi
+  Créer variable code_erreur
+  
+  REPETER
+    Afficher message demandant saisie avec couleurs disponibles
+    Lire texte_saisi
+    Convertir_saisie_en_combinaison(combinaison courante, texte_saisi) dans code_erreur
+  TANT QUE code_erreur différent de AUCUNE_ERREUR
+  
+  Tester_combinaison(combinaison courante, secret) dans nombre_corrects
+  
+  Afficher_etat_jeu(etat)
+  
+  RETOURNER nombre_corrects
 FIN FONCTION
