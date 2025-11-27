@@ -1,0 +1,89 @@
+Algo Mastermind
+
+Generer une combi  ->  demander une combi  ->  tester Combi  ->  Fin si combi correct
+							     ->  Sinon traitement de la combi  ->   retours a la demande de la combi 
+
+
+Generer une combi = crée un emplacement pour la combi  ->  faire n fois  -> prendre aléatoirement un élément des couleurs disponible -> copier cette couleur dans l'emplacement n de la combi  -> renvoyer la combi remplie 
+
+
+
+Demander une combi = Afficher "Quelle combi ?"  -> Saisie combi  -> Verification combi possible  -> si combi possible, renvoyer la combi
+												 -> sinon revenir a la saisie
+
+
+Verification combi possible = regarder pour chaque couleur dans le guess si la couleur existe dans les couleurs dispo 
+
+
+tester combi_final  =  création d'une copie de la combi generer (d1) et de la combi demandée (d2)  ->  pour chaque élément de la combi jusqu'à n -> verifier si combi generer a l'emplacement n = combi demandé à l'emplacement n  ->  nb_validé+1  ->  retiré l'élément n des combi copié  ->  fin pour  ->  pour chaque élément de la combi copié et traiter jusqu'à n  ->  si l'élément n de la combi demandé = l'élément n de la combi secrete et l'élément n de la combi secrete copié n'a pas été traiter  ->
+
+
+FONCTION Test_combi(Guess, Solution) -> Combi*
+  Parametre Guess : Color[MAX_COLOR]
+  Parametre Solution : Color[MAX_COLOR]
+  
+  resultat : Combi*
+  juste <- 0
+  moyen_correct <- 0
+  solution_utilisee : Booleen[MAX_COLOR] <- [FAUX, FAUX, FAUX, FAUX]
+  guess_utilisee : Booleen[MAX_COLOR] <- [FAUX, FAUX, FAUX, FAUX]
+  
+  POUR i DE 0 A MAX_COLOR-1 FAIRE
+    SI Guess[i] = Solution[i] ALORS
+      juste <- juste + 1
+      solution_utilisee[i] <- VRAI
+      guess_utilisee[i] <- VRAI
+      resultat->solution[i] <- CORRECT
+    SINON
+      resultat->solution[i] <- INDEFINITE
+    FIN SI
+  FIN POUR
+  
+  POUR i DE 0 A MAX_COLOR-1 FAIRE
+    SI guess_utilisee[i] = FAUX ALORS
+      POUR j DE 0 A MAX_COLOR-1 FAIRE
+        SI solution_utilisee[j] = FAUX ET Guess[i] = Solution[j] ALORS
+          moyen_correct <- moyen_correct + 1
+          solution_utilisee[j] <- VRAI
+          resultat->solution[i] <- PARTIAL
+          SORTIR DE LA BOUCLE
+        FIN SI
+      FIN POUR
+    FIN SI
+  FIN POUR
+  
+  POUR i DE 0 A MAX_COLOR-1 FAIRE
+    SI resultat->solution[i] = INDEFINITE ALORS
+      resultat->solution[i] <- FALSE
+    FIN SI
+  FIN POUR
+  
+  RETOURNER resultat
+FIN FONCTION
+
+FONCTION Generer_solution() -> Color[MAX_COLOR]
+  solution : Color[MAX_COLOR]
+  
+  POUR i DE 0 A MAX_COLOR-1 FAIRE
+    solution[i] <- RANDOM(0, 5)
+  FIN POUR
+  
+  RETOURNER solution
+FIN FONCTION
+
+FONCTION Saisir_guess() -> Color[MAX_COLOR]
+  guess : Color[MAX_COLOR]
+  
+  AFFICHER "Entrez votre combinaison (4 couleurs parmi Y, B, R, G, W, P) :"
+  
+  POUR i DE 0 A MAX_COLOR-1 FAIRE
+    REPETER
+      LIRE caractere
+      couleur_valide <- Convertir_char_en_color(caractere)
+    JUSQU'A couleur_valide ≠ NULL
+    
+    guess[i] <- couleur_valide
+  FIN POUR
+  
+  RETOURNER guess
+FIN FONCTION
