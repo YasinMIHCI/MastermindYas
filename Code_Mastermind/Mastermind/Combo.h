@@ -9,4 +9,5 @@ typedef struct combo {
 } COMBO;
 
 
-void initEmptyCombo(COMBO* combo);
+void initUnckeckCombo(COMBO* combo);   // cree un pointeur sur une combinaison qu'on pourra utiliser (initialiser a UNCHECKED)
+void PrintCombo(COMBO* combo);  // affiche la combinaison actuel ( essai + resultat )
