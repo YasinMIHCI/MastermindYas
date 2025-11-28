@@ -18,5 +18,27 @@ void Mastermind()
 
 void game()
 {
-	printf("Jeux");
+	COMBO secretCode;
+
+	initUnckeckCombo(&secretCode);
+
+	PrintCombo(&secretCode);
+	printf("\n");
+
+	GenerateRandomCode(&secretCode);
+
+	PrintCombo(&secretCode);
+	printf("\n");
+
+}
+
+void GenerateRandomCode(COMBO* combo) {
+	srand(time(NULL));
+	char* colorList = getColorsList();
+
+	for (int position = 0; position < COMBO_SIZE; position++) {
+		int randomIndex = rand() % NB_COLORS;
+		int colorValue = randomIndex + 1;  // En premier nous avons la color NONE donc nous nous decalons de un pour obtenir la couleur souhaiter
+		combo->attempt[position] = colorValue;
+	}
 }

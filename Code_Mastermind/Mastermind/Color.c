@@ -27,8 +27,9 @@ char Color_to_char(enum color color) {
         procceded_color = 'P';
         break;
     case NONE:
-        procceded_color = ' ';
+        procceded_color = 'N';
         break;
-        return procceded_color;
     }
+    return procceded_color;
+
 }
