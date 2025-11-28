@@ -11,5 +11,5 @@ void initUnckeckCombo(COMBO* combo)
 
 void PrintCombo(COMBO* combo)
 {
-    printf("%1c, %1c, %1c, %1c : %1c %1c %1c %1c", Color_to_char(combo->attempt[0]), Color_to_char(combo->attempt[1]), Color_to_char(combo->attempt[2]), Color_to_char(combo->attempt[3]), Sol_to_char(combo->result[0]), Sol_to_char(combo->result[1]), Sol_to_char(combo->result[2]), Sol_to_char(combo->result[3]));
+    printf("%1c, %1c, %1c, %1c : %1c %1c %1c %1c \n", Color_to_char(combo->attempt[0]), Color_to_char(combo->attempt[1]), Color_to_char(combo->attempt[2]), Color_to_char(combo->attempt[3]), Sol_to_char(combo->result[0]), Sol_to_char(combo->result[1]), Sol_to_char(combo->result[2]), Sol_to_char(combo->result[3]));
 }

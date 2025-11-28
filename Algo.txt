@@ -108,26 +108,6 @@ FONCTION Generer_code_secret(combinaison_secrete)
 FIN FONCTION
 
 
-FONCTION Convertir_caractere_vers_couleur(caractere) -> couleur
-  Entrée : caractère représentant une couleur
-  Sortie : énumération de couleur
-  
-  Créer variable couleur initialisée à AUCUNE
-  
-  SELON caractere FAIRE
-    CAS 'Y' : couleur prend valeur JAUNE
-    CAS 'B' : couleur prend valeur BLEU
-    CAS 'R' : couleur prend valeur ROUGE
-    CAS 'G' : couleur prend valeur VERT
-    CAS 'W' : couleur prend valeur BLANC
-    CAS 'P' : couleur prend valeur VIOLET
-  FIN SELON
-  
-  RETOURNER couleur
-FIN FONCTION
-
-
-
 FONCTION Convertir_couleur_vers_caractere(couleur) -> caractère
   Entrée : énumération de couleur
   Sortie : caractère représentant la couleur
@@ -149,27 +129,54 @@ FIN FONCTION
 
 
 
-FONCTION Convertir_saisie_en_combinaison(combinaison, texte_saisi) -> code_erreur
-  Entrées : combinaison à remplir, texte saisi par utilisateur
-  Sortie : code erreur (zéro si aucune erreur)
+FONCTION Demander_tentative_joueur(tentative)
+  Parametre tentative : COMBO*
   
-  Créer code_erreur initialisé à AUCUNE_ERREUR
+  Creer saisie : tableau de caracteres de taille COMBO_SIZE
+  Creer saisie_valide : booleen initialise a FAUX
   
-  SI longueur du texte égale taille_combinaison ALORS
-    POUR chaque position dans le texte FAIRE
-      Convertir caractère à position en couleur
-      Placer couleur dans combinaison à position
-      
-      SI couleur est AUCUNE ALORS
-        Ajouter deux puissance position au code_erreur
+  Afficher "Entrez votre combinaison de 4 couleurs parmi ces couleurs disponibles (Y, B, R, G, W, P) :"
+  
+  TANT QUE saisie_valide est FAUX FAIRE
+    Afficher "Votre tentative : "
+    Lire saisie
+    
+    POUR chaque caractere dans saisie FAIRE
+      Convertir caractere en majuscule
+    FIN POUR
+    
+    SI longueur de saisie differente de COMBO_SIZE ALORS
+      Afficher "Erreur : Vous devez entrer exactement COMBO_SIZE couleurs."
+      CONTINUER la boucle
+    FIN SI
+    
+    Creer toutes_valides : booleen initialise a VRAI
+    
+    POUR position de 0 a COMBO_SIZE moins un FAIRE
+      SI caractere a position n'est pas une couleur valide ALORS
+        Mettre toutes_valides a FAUX
+        SORTIR de la boucle
       FIN SI
     FIN POUR
-  SINON
-    Afficher message erreur longueur invalide
-    Ajouter ERREUR_LONGUEUR au code_erreur
-  FIN SI
+    
+    SI toutes_valides est VRAI ALORS
+      Mettre saisie_valide a VRAI
+      
+      POUR position de 0 a COMBO_SIZE moins un FAIRE
+        Obtenir indice_couleur du caractere a position
+        Calculer valeur_couleur egale indice_couleur plus un
+        Mettre tentative couleur a position egale valeur_couleur
+        Mettre tentative resultat a position egale NON_VERIFIE
+      FIN POUR
+    SINON
+      Afficher "Erreur : Couleurs invalides detectees."
+      Afficher "Couleurs disponibles : Y (Yellow), B (Blue), R (Red), G (Green), W (White), P (Purple)"
+    FIN SI
+  FIN TANT QUE
   
-  RETOURNER code_erreur
+  Afficher "Tentative enregistree : "
+  Afficher_combo(tentative)
+  Afficher saut de ligne
 FIN FONCTION
 
 

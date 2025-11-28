@@ -19,7 +19,8 @@ void Mastermind()
 void game()
 {
 	COMBO secretCode;
-
+	COMBO playerGuess;
+	
 	initUnckeckCombo(&secretCode);
 
 	PrintCombo(&secretCode);
@@ -28,6 +29,8 @@ void game()
 	GenerateRandomCode(&secretCode);
 
 	PrintCombo(&secretCode);
+
+	AskPlayerGuess(&playerGuess);
 	printf("\n");
 
 }

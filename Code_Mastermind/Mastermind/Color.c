@@ -33,3 +33,14 @@ char Color_to_char(enum color color) {
     return procceded_color;
 
 }
+
+int GetColorIndex(char colorChar)
+{
+    char* colorList = getColorsList();
+    for (int i = 0; colorList[i] != '\0'; i++) {
+        if (colorChar == colorList[i]) {
+            return i;
+        }
+    }
+    return -1;  // Couleur non trouvée
+}
