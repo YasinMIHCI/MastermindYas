@@ -24,7 +24,6 @@ void game()
 	initUnckeckCombo(&secretCode);
 
 	PrintCombo(&secretCode);
-	printf("\n");
 
 	GenerateRandomCode(&secretCode);
 
