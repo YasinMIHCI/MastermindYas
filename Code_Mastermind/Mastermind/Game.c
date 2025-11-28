@@ -20,16 +20,21 @@ void game()
 {
 	COMBO secretCode;
 	COMBO playerGuess;
-	
+	int correctCount;
 	initUnckeckCombo(&secretCode);
-
-	PrintCombo(&secretCode);
-
 	GenerateRandomCode(&secretCode);
-
 	PrintCombo(&secretCode);
-
 	AskPlayerGuess(&playerGuess);
+	PrintCombo(&playerGuess);
+	correctCount = CheckAttempt(&playerGuess, &secretCode);
+	PrintCombo(&playerGuess);
+	printf("Nombre de positions correctes : %d\n", correctCount);
+	if (correctCount == 4) {
+		printf("Code trouve\n");
+	}
+	else {
+		printf("Continuez a essayer !\n");
+	}
 	printf("\n");
 
 }

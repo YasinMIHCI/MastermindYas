@@ -3,8 +3,7 @@
 #include <stdio.h>
 #include "Combo.h"
 #include "config.h"
-#include "Color.h"
-
+#include "Gamestate.h"
 
 
 void Mastermind();  // la fonction principal qui aura la boucle de jeux
