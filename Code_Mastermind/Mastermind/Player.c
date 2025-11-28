@@ -28,7 +28,7 @@ void AskPlayerGuess(COMBO* guess)
         for (int i = 0; i < COMBO_SIZE; i++) {
             if (!IsValidColor(input[i])) {
                 allValid = 0;
-                continue;
+                break;
             }
         }
 
@@ -37,7 +37,7 @@ void AskPlayerGuess(COMBO* guess)
             // Remplir le combo avec les couleurs
             for (int i = 0; i < COMBO_SIZE; i++) {
                 int colorIndex = GetColorIndex(input[i]);
-                int colorValue = colorIndex + 1;  // Décalage de 1 car NONE est en premier
+                int colorValue = colorIndex + 1;
                 guess->attempt[i] = colorValue;
                 guess->result[i] = UNCHECKED;
             }
@@ -48,7 +48,6 @@ void AskPlayerGuess(COMBO* guess)
         }
     }
 
-    PrintCombo(guess);
 }
 
 int IsValidColor(char colorChar)

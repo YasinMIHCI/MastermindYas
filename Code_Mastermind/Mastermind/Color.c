@@ -44,15 +44,3 @@ int GetColorIndex(char colorChar)
     }
     return -1;  // Couleur non trouvée
 }
-
-/*enum color char_to_Color(char character) {
-    switch (character) {
-    case 'Y': return Y;
-    case 'B': return B;
-    case 'R': return R;
-    case 'G': return G;
-    case 'W': return W;
-    case 'P': return P;
-    default: return NONE;
-    }
-}*/

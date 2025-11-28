@@ -11,5 +11,24 @@ void initUnckeckCombo(COMBO* combo)
 
 void PrintCombo(COMBO* combo)
 {
-    printf("%1c, %1c, %1c, %1c : %1c %1c %1c %1c \n", Color_to_char(combo->attempt[0]), Color_to_char(combo->attempt[1]), Color_to_char(combo->attempt[2]), Color_to_char(combo->attempt[3]), Sol_to_char(combo->result[0]), Sol_to_char(combo->result[1]), Sol_to_char(combo->result[2]), Sol_to_char(combo->result[3]));
+    int partialMatches = 0;
+    int perfectMatches = 0;
+
+    for (int i = 0; i < COMBO_SIZE; i++) {
+        if (combo->result[i] == PARTIAL) {
+            partialMatches++;
+        }
+        else if (combo->result[i] == CORRECT) {
+            perfectMatches++;
+        }
+    }
+
+    printf("%c %c %c %c | Partiel : %d | Correct : %d\n",
+        Color_to_char(combo->attempt[0]),
+        Color_to_char(combo->attempt[1]),
+        Color_to_char(combo->attempt[2]),
+        Color_to_char(combo->attempt[3]),
+        partialMatches,
+        perfectMatches
+    );
 }

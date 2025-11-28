@@ -23,9 +23,7 @@ void game()
 	int correctCount;
 	initUnckeckCombo(&secretCode);
 	GenerateRandomCode(&secretCode);
-	PrintCombo(&secretCode);
 	AskPlayerGuess(&playerGuess);
-	PrintCombo(&playerGuess);
 	correctCount = CheckAttempt(&playerGuess, &secretCode);
 	PrintCombo(&playerGuess);
 	printf("Nombre de positions correctes : %d\n", correctCount);

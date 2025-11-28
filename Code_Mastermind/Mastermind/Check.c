@@ -5,7 +5,7 @@
 void CheckCorrectPositions(COMBO* playerAttempt, COMBO* secretCode, int* secretUsed, int* attemptUsed, int* correctCount) {
     for (int i = 0; i < COMBO_SIZE; i++) {
         if (playerAttempt->attempt[i] == secretCode->attempt[i]) {
-            (*correctCount)++;
+            (*correctCount)++;  // parenthese importante 
             secretUsed[i] = 1;
             attemptUsed[i] = 1;
             playerAttempt->result[i] = CORRECT;
