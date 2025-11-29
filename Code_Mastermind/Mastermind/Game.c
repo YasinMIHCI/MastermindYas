@@ -18,19 +18,18 @@ void Mastermind()
 
 void game()
 {
-	COMBO secretCode;
-	COMBO playerGuess;
-	int currentTurn = 0;
+	GameState gameState;
 	int HasWin = 0;
 	int correctCount;
-	initUnckeckCombo(&secretCode);
-	GenerateRandomCode(&secretCode);
-	PrintCombo(&secretCode);
-	while (currentTurn < MAX_TURNS && !HasWin) {
-		printf("Tentative %d sur %d\n", currentTurn + 1, MAX_TURNS);
-		AskPlayerGuess(&playerGuess);
-		correctCount = CheckAttempt(&playerGuess, &secretCode);
-		PrintCombo(&playerGuess);
+	InitializeGame(&gameState); 
+	
+	PrintCombo(&gameState.SecretCombo);
+	while (gameState.CurrentTurn < MAX_TURNS && !HasWin) {
+		printf("Tentative %d sur %d\n", gameState.CurrentTurn + 1, MAX_TURNS);
+		AskPlayerGuess(&gameState.ComboHistory[gameState.CurrentTurn]);
+		correctCount = CheckAttempt(&gameState.ComboHistory[gameState.CurrentTurn], &gameState.SecretCombo);
+		gameState.CurrentTurn++;
+		PrintHistory(&gameState);
 		if (correctCount == 4) {
 			printf("Code trouve\n");
 			HasWin = 1;
@@ -38,13 +37,12 @@ void game()
 		else {
 			printf("Continuez a essayer !\n");
 		}
-		currentTurn++;
 		printf("\n");
 	}
 	if (HasWin == 0) {
 		printf("Perdu, vous avez epuise vos %d tentatives\n", MAX_TURNS);
 		printf("Le code secret etait : ");
-		PrintCombo(&secretCode);
+		PrintCombo(&gameState.SecretCombo);
 	}
 	
 
