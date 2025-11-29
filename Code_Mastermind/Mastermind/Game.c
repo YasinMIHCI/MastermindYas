@@ -20,20 +20,26 @@ void game()
 {
 	COMBO secretCode;
 	COMBO playerGuess;
+	int currentTurn = 0;
+	int HasWin = 0;
 	int correctCount;
 	initUnckeckCombo(&secretCode);
 	GenerateRandomCode(&secretCode);
-	AskPlayerGuess(&playerGuess);
-	correctCount = CheckAttempt(&playerGuess, &secretCode);
-	PrintCombo(&playerGuess);
-	printf("Nombre de positions correctes : %d\n", correctCount);
-	if (correctCount == 4) {
-		printf("Code trouve\n");
+	PrintCombo(&secretCode);
+	while (currentTurn < MAX_TURNS && !HasWin) {
+		AskPlayerGuess(&playerGuess);
+		correctCount = CheckAttempt(&playerGuess, &secretCode);
+		PrintCombo(&playerGuess);
+		if (correctCount == 4) {
+			printf("Code trouve\n");
+			HasWin = 1;
+		}
+		else {
+			printf("Continuez a essayer !\n");
+		}
+		printf("\n");
 	}
-	else {
-		printf("Continuez a essayer !\n");
-	}
-	printf("\n");
+	
 
 }
 
