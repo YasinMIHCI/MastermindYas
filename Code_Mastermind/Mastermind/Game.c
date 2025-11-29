@@ -27,6 +27,7 @@ void game()
 	GenerateRandomCode(&secretCode);
 	PrintCombo(&secretCode);
 	while (currentTurn < MAX_TURNS && !HasWin) {
+		printf("Tentative %d sur %d\n", currentTurn + 1, MAX_TURNS);
 		AskPlayerGuess(&playerGuess);
 		correctCount = CheckAttempt(&playerGuess, &secretCode);
 		PrintCombo(&playerGuess);
@@ -37,7 +38,13 @@ void game()
 		else {
 			printf("Continuez a essayer !\n");
 		}
+		currentTurn++;
 		printf("\n");
+	}
+	if (HasWin == 0) {
+		printf("Perdu, vous avez epuise vos %d tentatives\n", MAX_TURNS);
+		printf("Le code secret etait : ");
+		PrintCombo(&secretCode);
 	}
 	
 
